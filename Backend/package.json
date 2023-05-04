@@ -1,0 +1,18 @@
+{
+  "name": "inotebook-backend",
+  "version": "1.0.0",
+  "description": "inotebook - your notebook in cloud",
+  "main": "index.js",
+  "scripts": {
+    "serve": "nodemon index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^7.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}
