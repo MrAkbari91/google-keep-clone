@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
 const UserSchema = new Schema({
     name: {
@@ -18,6 +19,9 @@ const UserSchema = new Schema({
         type: Date,
         default: Date.now,
     },
+    isactive: {
+        type: Boolean,
+    }
 });
 
 module.exports = mongoose.model('user', UserSchema);
