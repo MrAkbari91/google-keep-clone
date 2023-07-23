@@ -2,27 +2,108 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
 const {body, validationResult} = require('express-validator');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const fetchuser = require('../middleware/fetchuser');
+
+const jwtsecret = "Dhabali";
 
 
-//create user using post "/api/auth/" doesnt require auth
-router.post('/', [
+//create user route
+//create user using post "/api/auth/createuser" doesnt require auth
+router.post('/createuser', [
     body('name', 'Enter a valid name minimum length 5 charactor').isLength({min: 5}),
     body('email', 'Enter valid Email').isEmail(),
     body('password', 'Enter password atlist 8 charactor').isLength({min: 8}),
-], (req, res) => {
+], async (req, res) => {
+    //if there are errors then return false or bad request
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({errors: errors.array()});
     }
-    User.create({
-        name: req.body.name,
-        email: req.body.email,
-        password: req.body.password
-    }).then(user => res.json(user))
-        .catch(err => {
-            console.log(err)
-            res.json({error: 'This email is already used!', message: err.message})
-        });
+    try {
+        //check if user with same email exists already
+        let user = await User.findOne({email: req.body.email})
+        if (user) {
+            return res.status(400).json({errors: "User with this email already exists"})
+        }
+        const password = req.body.password
+        var salt = bcrypt.genSaltSync(10);
+        var hash = await bcrypt.hashSync(password, salt)
+
+        user = await User.create({
+            name: req.body.name,
+            email: req.body.email,
+            password: hash
+        })
+        const data = {
+            user: {
+                id: user.id
+            }
+        }
+        const authToken = jwt.sign(data, jwtsecret);
+
+        res.json(authToken)
+
+    } catch (error) {
+        console.log(error.message)
+        res.status(error.status).send('error', error.message)
+    }
 })
+
+
+// login route
+// Authenticate a user using post "/api/auth/login"
+
+router.post('/login', [
+    body('email', 'Enter valid Email').isEmail(),
+    body('password', "Password can't be blank").exists(),
+], async (req, res) => {
+    //if there are errors then return false or bad request
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({errors: errors.array()});
+    }
+    const {email, password} = req.body;
+    try {
+        let user = await User.findOne({email});
+        if (!user) {
+            return res.status(400).json({errors: "user not found"});
+        }
+
+        const passwordCompare = await bcrypt.compare(password, user.password);
+        if (!passwordCompare) {
+            return res.status(400).json({errors: "try to login with proper credentials"});
+        }
+
+        const data = {
+            user: {
+                id: user.id
+            }
+        }
+        const authToken = jwt.sign(data, jwtsecret);
+
+        res.json(authToken)
+
+    } catch (error) {
+        console.log(error.message)
+        res.status(error.status).send('error', error.message)
+    }
+
+})
+
+//get user data route
+router.post('/getuser', fetchuser, async (req, res) => {
+    try {
+        userId = req.user.id;
+        const user = await User.findById(userId).select("-password")
+        res.send(user)
+    } catch (error) {
+        // console.error(error.message)
+        res.status(400).send('internal server error: ' + error.message)
+    }
+    
+})
+
 
 module.exports = router
