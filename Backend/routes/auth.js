@@ -45,9 +45,9 @@ router.post('/createuser', [
 
         res.json(authToken)
 
-    } catch (error) {
-        console.log(error.message)
-        res.status(error.status).send('error', error.message)
+    } catch (err) {
+        console.log(err.message)
+        res.status(err.status).send('error', err.message)
     }
 })
 
@@ -66,11 +66,12 @@ router.post('/login', [
     }
     const {email, password} = req.body;
     try {
+        // find user data using email
         let user = await User.findOne({email});
         if (!user) {
             return res.status(400).json({errors: "user not found"});
         }
-
+        // compare has password 
         const passwordCompare = await bcrypt.compare(password, user.password);
         if (!passwordCompare) {
             return res.status(400).json({errors: "try to login with proper credentials"});
@@ -85,9 +86,9 @@ router.post('/login', [
 
         res.json(authToken)
 
-    } catch (error) {
-        console.log(error.message)
-        res.status(error.status).send('error', error.message)
+    } catch (err) {
+        console.log(err.message)
+        res.status(err.status).send('error', err.message)
     }
 
 })
@@ -96,11 +97,11 @@ router.post('/login', [
 router.post('/getuser', fetchuser, async (req, res) => {
     try {
         userId = req.user.id;
+        // get user data from auth-token using in header from middleware excerpt password
         const user = await User.findById(userId).select("-password")
         res.send(user)
-    } catch (error) {
-        // console.error(error.message)
-        res.status(400).send('internal server error: ' + error.message)
+    } catch (err) {
+        res.status(400).send('internal server error: ' + err.message)
     }
     
 })

@@ -16,8 +16,8 @@ const fetchuser = (req, res, next) =>{
         req.user = data.user;
         next();
 
-    }catch (error) {
-        res.status(401).send({error: 'Invalid credentials please login with valid credentials'});
+    }catch (err) {
+        res.status(401).send({err: 'Invalid credentials please login with valid credentials'});
     }
 }
 
