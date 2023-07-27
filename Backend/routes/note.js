@@ -12,7 +12,6 @@ router.get('/fetchallnotes', fetchuser, async (req, res) => {
         const notes = await Note.find({user: req.user.id})
         res.json(notes)
     } catch (err) {
-        console.log(err.message)
         res.status(err.status).send('error', err.message)
     }
 })
@@ -21,7 +20,6 @@ router.get('/fetchallnotes', fetchuser, async (req, res) => {
 router.post('/addnote', fetchuser, [
     body('title').exists(),
     body('description').exists(),
-    body('tag').exists(),
 ], async (req, res) => {
         try {
             // if any validation error when add notes
@@ -30,16 +28,15 @@ router.post('/addnote', fetchuser, [
                 return res.status(400).json({errors: errors.array()});
             }
 
-            const {title, description, tag} = req.body
+            const {title, description} = req.body
             const note = new Note({
-                title, description, tag, user: req.user.id
+                title, description, user: req.user.id
             })
 
             const savenotes = await note.save();
             res.json(savenotes);
 
         } catch (err) {
-            console.log(err.message)
             res.status(err.status).send('error', err.message)
         }
     }
@@ -74,7 +71,6 @@ router.put('/updatenote/:id', fetchuser, async (req, res) => {
         note = await Note.findByIdAndUpdate(req.params.id, {$set: newNotes}, {new: true})
         res.json({note})
     } catch (err) {
-        console.log(err.message)
         res.status(err.status).send('error', err.message)
     }
 })
@@ -96,7 +92,6 @@ router.delete('/deletenote/:id', fetchuser, async (req, res) => {
         note = await Note.findByIdAndDelete(req.params.id)
         res.json({"Succsess": "note has been deleted", note: note})
     } catch (err) {
-        console.log(err.message)
         res.status(err.status).send('error', err.message)
     }
 })

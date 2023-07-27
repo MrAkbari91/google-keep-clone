@@ -15,7 +15,6 @@ const Notesitem = (props) => {
                         <div onClick={() => { updateNote(note) }}>
                             <h5 className="card-title">{note.title}</h5>
                             <p className="card-text">{note.description}</p>
-                            {/* <p className="card-text">{note.tag}</p> */}
                         </div>
                         <div className='text-end'>
                             <img src={bin} width={20} alt="bin" onClick={() => { deleteNote(note._id) }} />
