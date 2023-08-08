@@ -42,7 +42,7 @@ const Notes = () => {
             <Addnote />
 
             <button ref={ref} type="button" className="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                Launch demo modal
+                Modal
             </button>
             <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div className="modal-dialog">
@@ -72,7 +72,7 @@ const Notes = () => {
                 </div>
             </div>
 
-            <div className="row">
+            <div className="row container mx-auto">
                 {notes.map((note) => {
                     return (
                         <Notesitem note={note} updateNote={updateNote} key={note._id} />
