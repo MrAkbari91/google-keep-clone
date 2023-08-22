@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import NoteContext from './NotesContext';
 
 const NotesState = (props) => {
@@ -15,7 +15,7 @@ const NotesState = (props) => {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjRiZDg0M2M0M2I5YjY5MjA4ZmVjNGUyIn0sImlhdCI6MTY5MDE0MTc2OX0.h7JCPqRlvCGYv5kj_eSTy7_thvbtoGNK2yMnWBoNj8o"
+                "auth-token": localStorage.getItem('token')
             }
         });
         const json = await response.json()

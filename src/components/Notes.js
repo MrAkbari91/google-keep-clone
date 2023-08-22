@@ -3,6 +3,7 @@ import noteContext from '../context/notes/NotesContext';
 import Notesitem from './Notesitem';
 import Addnote from './Addnote';
 import { useNavigate } from 'react-router-dom'
+import Masonry from 'react-masonry-css'
 
 
 const Notes = () => {
@@ -24,7 +25,7 @@ const Notes = () => {
 
     const [note, setNote] = useState({ etitle: "", edescription: "" })
     const updateNote = (currentNote) => {
-        ref.current.click();
+        // ref.current.click();
         setNote({ id: currentNote._id, etitle: currentNote.title, edescription: currentNote.description })
     }
 
@@ -41,10 +42,10 @@ const Notes = () => {
         <>
             <Addnote />
 
-            <button ref={ref} type="button" className="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            {/* <button ref={ref} type="button" className="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 Modal
-            </button>
-            <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            </button> */}
+            {/* <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div className="modal-dialog">
                     <div className="modal-content">
                         <div className="modal-header">
@@ -65,20 +66,28 @@ const Notes = () => {
                             </form>
                         </div>
                         <div className="modal-footer">
-                            {/* <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button> */}
                             <button onClick={handleClick} type="button" className="btn btn-primary">Update Note</button>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> */}
+            {/* <div className='flex flex-wrap'> */}
 
-            <div className="row container mx-auto">
-                {notes.map((note) => {
-                    return (
+            {/* array of JSX items */}
+            {notes.map((note) => {
+                return (
+                    <Masonry
+                        breakpointCols={5}
+                        className="my-masonry-grid"
+                        columnClassName="my-masonry-grid_column">
+                        {/* <div className="sm:w-full md:w-1/2 lg:w-1/3 xl:w-1/4 p-4"> */}
                         <Notesitem note={note} updateNote={updateNote} key={note._id} />
-                    )
-                })}
-            </div>
+                        {/* </div> */}
+                    </Masonry>
+                )
+            })}
+
+            {/* </div > */}
         </>
     );
 }
