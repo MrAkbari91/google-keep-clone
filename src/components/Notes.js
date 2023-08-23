@@ -71,23 +71,18 @@ const Notes = () => {
                     </div>
                 </div>
             </div> */}
-            {/* <div className='flex flex-wrap'> */}
 
-            {/* array of JSX items */}
-            {notes.map((note) => {
-                return (
-                    <Masonry
-                        breakpointCols={5}
-                        className="my-masonry-grid"
-                        columnClassName="my-masonry-grid_column">
-                        {/* <div className="sm:w-full md:w-1/2 lg:w-1/3 xl:w-1/4 p-4"> */}
+            <Masonry
+                breakpointCols={5}
+                className="my-masonry-grid"
+                columnClassName="my-masonry-grid_column">
+                {notes.map((note) => {
+                    return (
                         <Notesitem note={note} updateNote={updateNote} key={note._id} />
-                        {/* </div> */}
-                    </Masonry>
-                )
-            })}
+                    )
+                })}
+            </Masonry>
 
-            {/* </div > */}
         </>
     );
 }
