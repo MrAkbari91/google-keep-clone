@@ -25,6 +25,7 @@ const Addnote = () => {
         setNote({ ...note, [e.target.name]: e.target.value })
     }
 
+    
     return (
         <>
             <div className="mx-auto my-5 w-full lg:max-w-xl p-6 space-y-8 sm:p-8 bg-white rounded-lg border border-gray-200 shadow-sm dark:bg-gray-800 dark:border-gray-700">
